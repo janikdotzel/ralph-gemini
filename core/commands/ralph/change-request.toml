@@ -1,11 +1,9 @@
+description = "Create fix specs from issues found during testing"
+
+prompt = """
 # /ralph:change-request - Create Change Request from Testing
 
 Document bugs and issues found during testing, generate new specs for Ralph to fix.
-
-## Usage
-```
-/ralph:change-request
-```
 
 ## Prerequisites
 - App has been built by Ralph (`/ralph:deploy` completed)
@@ -45,44 +43,11 @@ Analyze input and categorize:
 
 **PHASE 3: CREATE CHANGE_REQUEST.md**
 
-Create `docs/CHANGE_REQUEST.md`:
-
-```markdown
-# Change Request - [DATE]
-
-## Summary
-{1-2 sentences about what was found}
-
-## Categories
-
-### Bugs
-| # | Problem | Affects | Priority |
-|---|---------|---------|----------|
-| B1 | {description} | {feature} | HIGH/MED/LOW |
-
-### Incomplete
-| # | Feature | Status | Missing |
-|---|---------|--------|---------|
-| I1 | {feature} | {%} | {what} |
-
-### Missing
-| # | Feature | Spec Reference |
-|---|---------|----------------|
-| M1 | {feature} | {original-spec} |
-
-### Enhancements (Optional)
-| # | Suggestion | Value |
-|---|------------|-------|
-| E1 | {suggestion} | {value} |
-
----
-
-## Original Specs
-{List which specs were run}
-
-## Testing Done
-{Summary of testing}
-```
+Create `docs/CHANGE_REQUEST.md` with:
+- Summary
+- Categories tables (Bugs, Incomplete, Missing, Enhancements)
+- Original specs list
+- Testing summary
 
 **PHASE 4: GENERATE NEW SPECS**
 
@@ -95,7 +60,7 @@ specs/
 └── CR-03-add-{missing}.md
 ```
 
-**Spec format for fixes:**
+**Spec format for fixes (max 15 lines):**
 ```markdown
 # CR-XX: {Short description}
 
@@ -112,27 +77,9 @@ specs/
 - [ ] Regression: {existing functionality still works}
 ```
 
-**IMPORTANT:**
-- Keep specs MINIMAL (max 15 lines)
-- One spec = one problem
-- Include regression test in "Done When"
-- CR specs run AFTER original specs
-
 **PHASE 5: UPDATE IMPLEMENTATION_PLAN.md**
 
-Add CR tasks to `docs/IMPLEMENTATION_PLAN.md`:
-
-```markdown
-## Change Request Tasks
-
-### CR Fixes (Priority: Critical)
-- [ ] CR-01: {fix}
-- [ ] CR-02: {fix}
-- [ ] **HARD STOP** - Verify all CR fixes
-
-### CR Enhancements (Priority: Low)
-- [ ] CR-03: {enhancement}
-```
+Add CR tasks to `docs/IMPLEMENTATION_PLAN.md` under "Change Request Tasks" section.
 
 **WHEN DONE - OUTPUT THIS EXACT MESSAGE:**
 ```
@@ -140,3 +87,4 @@ Add CR tasks to `docs/IMPLEMENTATION_PLAN.md`:
 
 Next: Run /ralph:deploy to send fixes to VM
 ```
+"""
