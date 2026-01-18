@@ -1,0 +1,86 @@
+description = "Deploy project to VM or Docker and start Ralph execution"
+
+prompt = """
+# /ralph:deploy - Deploy to VM or Docker
+
+Push project to GitHub and start Ralph on VM or Docker.
+
+## Prerequisites
+- IMPLEMENTATION_PLAN.md or specs/*.md must exist
+- VM or Docker must be configured (.ralph/config.json)
+- GitHub repo must exist
+
+## Instructions
+
+**STEP 1: VALIDATE**
+
+Run validation and STOP if anything is missing:
+
+```bash
+echo "=== PRE-DEPLOY VALIDATION ==="
+
+# 1. Specs must exist
+SPEC_COUNT=$(ls -1 specs/*.md 2>/dev/null | grep -v "CR-" | wc -l | tr -d ' ')
+if [ "$SPEC_COUNT" -eq 0 ]; then
+    echo "FATAL: No specs found in specs/"
+    echo "   Run /ralph:plan first to generate specs"
+    exit 1
+fi
+echo "Found $SPEC_COUNT specs"
+
+# 2. PRD should exist
+if [ ! -f "docs/PRD.md" ] && [ ! -f "docs/prd.md" ]; then
+    echo "WARNING: No PRD found in docs/"
+fi
+
+# 3. AGENTS.md should exist
+if [ ! -f "AGENTS.md" ]; then
+    echo "WARNING: No AGENTS.md found"
+fi
+
+# 4. Config must exist
+if [ ! -f ".ralph/config.json" ]; then
+    echo "FATAL: No config found (.ralph/config.json)"
+    echo "   Run: npx github:janikdotzel/ralph-gemini install"
+    exit 1
+fi
+
+# 5. Git remote
+if ! git remote get-url origin > /dev/null 2>&1; then
+    echo "FATAL: No git remote 'origin'"
+    exit 1
+fi
+
+echo "=== VALIDATION PASSED ==="
+```
+
+If anything is FATAL → **STOP** and ask user to fix it.
+
+**STEP 2: CHECK AI ON VM**
+
+Read `.ralph/config.json` to see execution type. If `gcp` or `ssh`, verify AI CLI is installed on VM.
+
+**STEP 3: PUSH TO GITHUB**
+```bash
+git add -A
+git commit -m "Deploy: $(date +%Y-%m-%d_%H:%M)" || true
+git push origin main
+```
+
+**STEP 4: START ON VM/DOCKER**
+
+Based on config.execution:
+- **gcp**: Use `gcloud compute ssh` to clone/pull and start ralph
+- **ssh**: Use `ssh` to clone/pull and start ralph
+- **docker**: Build and run container locally
+
+**STEP 5: OUTPUT THIS EXACT MESSAGE:**
+```
+Started on {execution type}!
+
+Follow progress:
+  {appropriate command for checking logs}
+
+Next: Run /ralph:status to check progress
+```
+"""

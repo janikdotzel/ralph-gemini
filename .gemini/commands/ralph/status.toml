@@ -1,16 +1,11 @@
+description = "Check Ralph execution progress on VM or Docker"
+
+prompt = """
 # /ralph:status - Check Ralph Status
 
 Show Ralph's progress on VM or Docker.
 
-## Usage
-```
-/ralph:status
-/ralph:status --log      # Show more log lines
-```
-
 ## Instructions
-
-Read config and fetch status.
 
 **STEP 1: READ CONFIG**
 ```bash
@@ -20,13 +15,9 @@ cat .ralph/config.json
 
 **STEP 2: FETCH STATUS**
 
-Based on execution type:
+Based on execution type, SSH to VM or check Docker and run:
 
-**If `gcp`:**
 ```bash
-gcloud compute ssh user@vm --zone=zone --project=project --command='
-cd ~/projects/$(ls -t ~/projects | head -1)
-
 echo "=== RALPH STATUS ==="
 echo ""
 
@@ -58,25 +49,11 @@ if [ -f "ralph-deploy.log" ]; then
 fi
 
 # Errors
-errors=$(grep -c "ERROR\|Failed" ralph-deploy.log 2>/dev/null || echo 0)
+errors=$(grep -c "ERROR\\|Failed" ralph-deploy.log 2>/dev/null || echo 0)
 if [ "$errors" -gt 0 ]; then
     echo ""
     echo "Errors found: $errors"
 fi
-'
-```
-
-**If `ssh`:**
-```bash
-ssh user@ip '
-cd ~/projects/$(ls -t ~/projects | head -1)
-# Same status commands as above
-'
-```
-
-**If `docker`:**
-```bash
-docker logs --tail 50 ralph-runner
 ```
 
 **OUTPUT FORMAT:**
@@ -107,10 +84,4 @@ Ralph finished: {done}/{total} specs
 
 Next: Run /ralph:review to check results
 ```
-
-**IF --log FLAG:**
-Show more log:
-```bash
-# Show last 50 lines instead of 5
-tail -50 ralph-deploy.log
-```
+"""
