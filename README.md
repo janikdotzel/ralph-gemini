@@ -17,7 +17,7 @@ Ralph Gemini is an autonomous development system that:
 
 ```bash
 # Install in your project
-npx ralph-gemini install
+npx github:janikdotzel/ralph-gemini install
 
 # Start the guided workflow
 /ralph:discover    # Create PRD
