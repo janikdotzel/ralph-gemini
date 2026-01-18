@@ -1,0 +1,43 @@
+{
+  "name": "ralph-gemini",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "AI-driven autonomous development workflow for Gemini CLI and Antigravity",
+  "main": "bin/ralph-gemini.js",
+  "bin": {
+    "ralph-gemini": "./bin/ralph-gemini.js"
+  },
+  "files": [
+    "bin",
+    "cli",
+    "core"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "gemini",
+    "antigravity",
+    "ai",
+    "autonomous",
+    "development",
+    "workflow",
+    "ralph"
+  ],
+  "author": "sandstream",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sandstream/ralph-gemini.git"
+  },
+  "dependencies": {
+    "commander": "^12.0.0",
+    "inquirer": "^9.2.0",
+    "chalk": "^5.3.0",
+    "fs-extra": "^11.2.0",
+    "node-notifier": "^10.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

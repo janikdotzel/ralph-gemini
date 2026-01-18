@@ -1,0 +1,116 @@
+# /ralph:status - Check Ralph Status
+
+Show Ralph's progress on VM or Docker.
+
+## Usage
+```
+/ralph:status
+/ralph:status --log      # Show more log lines
+```
+
+## Instructions
+
+Read config and fetch status.
+
+**STEP 1: READ CONFIG**
+```bash
+cat .ralph/config.json
+# Get: execution, vm_name/vm_ip, user, zone, project
+```
+
+**STEP 2: FETCH STATUS**
+
+Based on execution type:
+
+**If `gcp`:**
+```bash
+gcloud compute ssh user@vm --zone=zone --project=project --command='
+cd ~/projects/$(ls -t ~/projects | head -1)
+
+echo "=== RALPH STATUS ==="
+echo ""
+
+# Progress
+if [ -d "specs" ]; then
+    total=$(ls -1 specs/*.md 2>/dev/null | grep -v "CR-" | wc -l | tr -d " ")
+    done=$(ls -1 .spec-checksums/*.md5 2>/dev/null | wc -l | tr -d " ")
+    echo "Progress: $done/$total specs"
+fi
+
+# Current spec (from log)
+if [ -f "ralph-deploy.log" ]; then
+    current=$(grep -o "=== [^=]* ===" ralph-deploy.log | tail -1 | tr -d "=")
+    echo "Current: $current"
+fi
+
+# Status
+if pgrep -f "ralph.sh" > /dev/null; then
+    echo "Status: RUNNING"
+else
+    echo "Status: STOPPED"
+fi
+
+# Last activity
+if [ -f "ralph-deploy.log" ]; then
+    echo ""
+    echo "Last 5 log lines:"
+    tail -5 ralph-deploy.log
+fi
+
+# Errors
+errors=$(grep -c "ERROR\|Failed" ralph-deploy.log 2>/dev/null || echo 0)
+if [ "$errors" -gt 0 ]; then
+    echo ""
+    echo "Errors found: $errors"
+fi
+'
+```
+
+**If `ssh`:**
+```bash
+ssh user@ip '
+cd ~/projects/$(ls -t ~/projects | head -1)
+# Same status commands as above
+'
+```
+
+**If `docker`:**
+```bash
+docker logs --tail 50 ralph-runner
+```
+
+**OUTPUT FORMAT:**
+```
+=== RALPH STATUS ===
+
+Progress: {done}/{total} specs
+Current: {current-spec-name}
+Status: {RUNNING|STOPPED}
+
+Last 5 log lines:
+{log output}
+```
+
+**THEN OUTPUT THIS EXACT MESSAGE:**
+
+If RUNNING:
+```
+{done}/{total} specs complete
+
+Check again: /ralph:status
+When done: /ralph:review
+```
+
+If STOPPED:
+```
+Ralph finished: {done}/{total} specs
+
+Next: Run /ralph:review to check results
+```
+
+**IF --log FLAG:**
+Show more log:
+```bash
+# Show last 50 lines instead of 5
+tail -50 ralph-deploy.log
+```

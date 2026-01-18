@@ -1,0 +1,22 @@
+# Development
+.git
+.github
+.gitignore
+.vscode
+.idea
+
+# Docs (keep README)
+docs/
+
+# Tests
+test/
+*.test.js
+*.spec.js
+
+# Config
+.env*
+*.log
+
+# Generated
+.spec-checksums/
+.screenshots/

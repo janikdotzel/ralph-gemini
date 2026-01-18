@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+build/
+
+# Logs
+*.log
+.ralph/logs/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test
+.spec-checksums/
+.screenshots/
+.test-output.log
+.design-review.log
+test-results/
+playwright-report/
+
+# Temp
+*.tmp
+*.temp

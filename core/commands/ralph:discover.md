@@ -1,0 +1,271 @@
+# /ralph:discover - Interactive Requirements Discovery
+
+Start an interactive discovery session to create a PRD and set up the project.
+
+## Usage
+```
+/ralph:discover [project-name]
+/ralph:discover my-app
+/ralph:discover my-app --input meeting-notes.md
+```
+
+## CRITICAL INSTRUCTIONS
+
+**NUMBERED CHOICES FORMAT - MANDATORY:**
+You MUST present ALL choices as numbered lists. Users respond with just a number.
+
+Format EVERY question exactly like this:
+```
+[Question text]
+
+1) Option one
+2) Option two
+3) Option three
+
+Reply with number:
+```
+
+NEVER ask open-ended questions when there are known options.
+ALWAYS wait for user to reply with a number before proceeding.
+If user types something other than a number, ask them to reply with just the number.
+
+---
+
+## STEP 1: Project type
+
+```
+What type of project?
+
+1) Greenfield - New project from scratch
+2) Brownfield - Existing project
+
+Reply with number:
+```
+
+---
+
+## STEP 2: Project basics (Greenfield) or Source (Brownfield)
+
+### If Greenfield:
+
+Ask description first (free text): "What are we building?"
+
+Then suggest a project name based on the description:
+```
+Suggested project name: {smart-name-based-on-description}
+
+1) Use this name
+2) Enter my own name
+
+Reply with number:
+```
+
+If user picks 2, ask: "Project name?"
+
+---
+
+## STEP 3: Feature suggestions (Greenfield only)
+
+**MANDATORY: IMMEDIATELY after getting the description, suggest features.**
+
+DO NOT ask "what features do you want?" - ANALYZE the description and SUGGEST.
+
+Examples:
+
+**Todo app** → auth, CRUD todos, complete status, due dates, categories, search, filters
+**Blog** → posts, comments, categories, tags, search, admin panel, RSS
+**E-commerce** → products, cart, checkout, payments, orders, user accounts
+**Chat app** → auth, messages, rooms, real-time, notifications, file sharing
+
+Format EXACTLY like this:
+```
+Based on "todo app", here are recommended features:
+
+1) User authentication (login/register)
+2) Create/edit/delete todos
+3) Mark todos as complete
+4) Due dates and reminders
+5) Categories/tags
+6) Search and filter
+7) All of the above
+
+Select features (e.g. "1,2,3" or "7" for all):
+```
+
+User selects by typing numbers like "1,3,5" or "7" for all.
+
+After selection: "Any additional features? (or 'none'):"
+
+Then: "Any constraints or requirements? (or 'none'):"
+
+---
+
+## STEP 3b: Design preferences (Greenfield only)
+
+```
+Do you have design preferences?
+
+1) Yes - I have brand guidelines or a website I like
+2) No - Use sensible defaults
+
+Reply with number:
+```
+
+If yes, ask:
+- "Brand guidelines URL or file path? (or 'none'):"
+- "Website you like the design of? (URL or 'none'):"
+- "Color preferences? (e.g. 'blue and white', 'dark mode', or 'none'):"
+
+Save these to PRD for reference during build.
+
+---
+
+## STEP 4: Template selection (Greenfield only)
+
+Based on the description, recommend a stack:
+
+```
+Based on your project, which stack?
+
+1) React + Vite + Tailwind + Supabase (recommended for apps with auth/database)
+2) React + Vite + Tailwind (frontend only)
+3) Next.js + Tailwind (full-stack with SSR)
+4) Custom - Define your own stack
+
+Reply with number:
+```
+
+If "custom" was selected:
+```
+Frontend framework?
+
+1) React + Vite
+2) Next.js
+3) Vue
+4) Svelte
+5) Other
+
+Reply with number:
+```
+
+```
+Backend?
+
+1) Supabase
+2) Firebase
+3) PostgreSQL + Express
+4) None (frontend only)
+5) Other
+
+Reply with number:
+```
+
+---
+
+## STEP 5: Tasks (Brownfield only)
+
+### If Brownfield:
+
+```
+Where is the project?
+
+1) GitHub repo
+2) Local path
+
+Reply with number:
+```
+
+If GitHub: Ask for "GitHub repo (user/repo):"
+If local: Ask for "Path to project:"
+
+Then read package.json to detect stack and show what was found.
+
+```
+Is this stack detection correct?
+
+1) Yes
+2) No, let me adjust
+
+Reply with number:
+```
+
+```
+What type of work?
+
+1) New features
+2) Bug fixes
+3) Refactoring
+4) Mix of above
+
+Reply with number:
+```
+
+Then ask (free text): "List the tasks to do (comma separated):"
+Then ask (free text): "Any project context I should know? (or 'none'):"
+Then ask (free text): "Files to avoid changing? (or 'none'):"
+
+---
+
+## STEP 6: Generate output
+
+When all info is collected:
+
+### 1. Create docs/PRD.md
+```bash
+mkdir -p docs
+```
+
+PRD should contain all gathered information using the PRD-template.md structure.
+
+### 2. Generate AGENTS.md
+
+Create AGENTS.md at project root with:
+```markdown
+# AGENTS.md - {projectname}
+
+## Project
+{description}
+
+## Tech Stack
+- Frontend: {stack}
+- Backend: {stack}
+
+## Security Rules
+
+CRITICAL - NEVER do:
+- rm -rf / or sudo rm
+- curl | bash or wget | bash
+- Expose credentials in code
+- Commit .env files
+- Hardcode API keys
+
+SECRETS HANDLING:
+- .env files NEVER in repo
+- Use process.env.VAR_NAME
+- .gitignore MUST contain .env*
+
+## Workflow
+1. Read spec carefully
+2. Implement step by step
+3. Run tests often
+4. Output `<promise>DONE</promise>` when done
+```
+
+### 3. Show summary and NEXT STEP
+
+Confirm what was created:
+- docs/PRD.md - Product Requirements Document
+- AGENTS.md - Project instructions for AI agents
+
+**OUTPUT THIS EXACT MESSAGE:**
+```
+PRD created! Review docs/PRD.md
+
+Next: Run /ralph:plan to create implementation specs
+```
+
+---
+
+## START NOW
+
+Begin by asking the first numbered question. Remember: ALL choices must be numbered, user replies with just a number.

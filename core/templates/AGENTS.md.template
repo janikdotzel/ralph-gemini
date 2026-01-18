@@ -1,0 +1,146 @@
+# AGENTS.md - {PROJECT_NAME}
+
+> Unified context file for all AI agents (Gemini, Claude, etc.)
+> This file should be at the root of your project.
+
+---
+
+## Project Overview
+
+{Brief description of the project}
+
+**Tech Stack:**
+- Frontend: {framework}
+- Backend: {framework/service}
+- Database: {database}
+- Testing: Playwright + Vitest
+
+---
+
+## Development Commands
+
+```bash
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run test         # Run unit tests
+npx playwright test  # Run E2E tests
+```
+
+---
+
+## Project Structure
+
+```
+src/
+  components/     # Reusable UI components
+  pages/          # Page components
+  hooks/          # Custom React hooks
+  lib/            # Utilities and helpers
+  types/          # TypeScript types
+e2e/              # Playwright E2E tests
+specs/            # Ralph spec files
+docs/             # Documentation
+```
+
+---
+
+## Coding Standards
+
+### TypeScript
+- Use strict mode
+- Prefer interfaces over types for objects
+- Use meaningful variable names
+- Add JSDoc comments for complex functions
+
+### React
+- Use functional components with hooks
+- Keep components small and focused
+- Use custom hooks for reusable logic
+- Prefer composition over prop drilling
+
+### Testing
+- Write E2E tests for critical user flows
+- Unit test business logic
+- Use data-testid for E2E selectors
+
+---
+
+## Security Rules
+
+**CRITICAL - NEVER do:**
+- `rm -rf /` or `sudo rm`
+- `curl | bash` or `wget | bash`
+- Expose credentials in code
+- Commit .env files
+- Hardcode API keys
+
+**Secrets Handling:**
+- .env files NEVER in repo
+- Use `process.env.VAR_NAME`
+- .gitignore MUST contain `.env*`
+
+---
+
+## Ralph Workflow
+
+When executing specs, follow this pattern:
+
+1. Read the spec carefully
+2. Implement step by step
+3. Run tests frequently (`npm run build`, `npx playwright test`)
+4. Output `<promise>DONE</promise>` when complete
+
+**Before marking DONE:**
+- All acceptance criteria met
+- Build passes without errors
+- E2E tests pass
+- No TypeScript errors
+
+---
+
+## Environment Variables
+
+```bash
+# Required
+{ENV_VAR_1}=         # Description
+{ENV_VAR_2}=         # Description
+
+# Optional
+{ENV_VAR_3}=         # Description
+```
+
+---
+
+## Common Patterns
+
+### API Calls
+```typescript
+// Use the api client from lib/api
+import { api } from '@/lib/api';
+
+const data = await api.get('/endpoint');
+```
+
+### State Management
+```typescript
+// Use React Context for global state
+import { useAuth } from '@/hooks/useAuth';
+
+const { user, signIn, signOut } = useAuth();
+```
+
+### Error Handling
+```typescript
+try {
+  await someAsyncOperation();
+} catch (error) {
+  console.error('Operation failed:', error);
+  // Show user-friendly error message
+}
+```
+
+---
+
+## Notes
+
+{Additional project-specific notes}
