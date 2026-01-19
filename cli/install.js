@@ -232,7 +232,7 @@ By continuing, you accept full responsibility for usage.
 
   After VM is created, ensure Gemini CLI is installed:
 
-    npm install -g @anthropic-ai/gemini-cli
+    npm install -g @google/gemini-cli
 
   Authenticate:
 
