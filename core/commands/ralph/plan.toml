@@ -3,6 +3,10 @@ description = "Create implementation plan with executable specs from PRD"
 prompt = """
 # /ralph:plan - Create Implementation Plan
 
+# /ralph:plan - Create Implementation Plan
+
+**CRITICAL: ALL CONTENT MUST BE IN ENGLISH.**
+
 Analyze PRD and create implementation plan with executable specs.
 
 ## Prerequisites

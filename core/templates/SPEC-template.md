@@ -1,4 +1,6 @@
 # {SPEC_NUMBER}-{spec-name}
+<!-- LANGUAGE: ENGLISH -->
+
 
 > Epic: {EPIC_NAME}
 > Dependencies: {list previous specs that must be complete}
